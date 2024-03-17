@@ -2,7 +2,7 @@ using CanvasCommunity.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+AddServices();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -23,3 +23,8 @@ app.MapControllers();
 
 app.Run();
 
+void AddServices()
+{
+    builder.Services.AddHttpClient();
+    builder.Services.AddScoped<IArtsyTokenManager,ArtsyTokenManager>();
+}
