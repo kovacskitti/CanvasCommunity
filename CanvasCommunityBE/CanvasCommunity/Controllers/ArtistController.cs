@@ -64,4 +64,30 @@ public class ArtistController : ControllerBase
 
         return null;
     }
+    
+    [HttpGet("GetPaintingsByArtistId")]
+    public async Task<ActionResult<string>> GetPaintingsByArtistId(string artistId)
+    {
+        var url = $"https://api.artsy.net/api/artworks?artist_id={artistId}";
+        try
+        {
+
+            var xappToken = await _artsyTokenManager.GetTokenFromArtsyAsync();
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Add("X-XAPP-Token", xappToken);
+            
+            _logger.LogInformation($"Calling Artsy API with url: {url}", url);
+            
+            var response = await client.GetAsync(url);
+            
+            return await response.Content.ReadAsStringAsync();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error in calling Artsy API with url: {url}");
+        }
+
+        return null;
+    }
+    
 }
