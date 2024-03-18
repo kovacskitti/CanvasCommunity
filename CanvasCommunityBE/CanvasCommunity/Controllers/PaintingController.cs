@@ -20,23 +20,19 @@ public class PaintingController : ControllerBase
     }
 
     [HttpGet("GetPainting")]
-    public async Task<ActionResult<string>> GetPainting(string artistId)
+    public async Task<ActionResult<string>> GetPainting(string paintingId)
     {
-        var url = $"https://api.artsy.net/api/artists/{artistId}";
+        var url = $"https://api.artsy.net/api/artworks/{paintingId}";
+        
         try
         {
-
             var xappToken = await _artsyTokenManager.GetTokenFromArtsyAsync();
             var client = _clientFactory.CreateClient();
             client.DefaultRequestHeaders.Add("X-XAPP-Token", xappToken);
-            
             _logger.LogInformation($"Calling Artsy API with url: {url}", url);
-            
             var response = await client.GetAsync(url);
-            
-            
             return await response.Content.ReadAsStringAsync();
-        }
+       }
         catch (Exception e)
         {
             _logger.LogError(e, $"Error in calling Artsy API with url: {url}");
