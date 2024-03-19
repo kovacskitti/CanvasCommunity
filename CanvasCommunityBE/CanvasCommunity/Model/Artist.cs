@@ -2,6 +2,7 @@ namespace CanvasCommunity;
 
 public class Artist
 {
+    public string Id { set; get; }
     public string Name { set; get; }
     public List<Painting> Paintings { set; get; }
     public string Description { set; get; }
