@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Newtonsoft.Json;
+
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace CanvasCommunity.Services;
@@ -17,6 +17,7 @@ public class ArtsyTokenManager : IArtsyTokenManager
         _httpClient = httpClient;
         _logger = logger;
         _configuration = configuration;
+
     }
 
     public async Task<string> GetTokenFromArtsyAsync()
