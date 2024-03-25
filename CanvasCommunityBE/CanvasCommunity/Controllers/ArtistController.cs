@@ -1,5 +1,7 @@
+using CanvasCommunity.Context;
 using CanvasCommunity.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CanvasCommunity;
 
@@ -11,12 +13,14 @@ public class ArtistController : ControllerBase
     private readonly ILogger<Painting> _logger;
     private readonly IArtsyTokenManager _artsyTokenManager;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly AppDbContext _dbContext;
 
-    public ArtistController(ILogger<Painting> logger, IArtsyTokenManager artsyTokenManager, IHttpClientFactory httpClientFactory)
+    public ArtistController(ILogger<Painting> logger, IArtsyTokenManager artsyTokenManager, IHttpClientFactory httpClientFactory, AppDbContext dbContext)
     {
         _logger = logger;
         _artsyTokenManager = artsyTokenManager;
         _httpClientFactory = httpClientFactory;
+        _dbContext = dbContext;
     }
 
     [HttpGet("GetArtistByName")]
@@ -85,6 +89,29 @@ public class ArtistController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, $"Error in calling Artsy API with url: {url}");
+        }
+
+        return null;
+    }
+    
+    [HttpGet("TestAddDB")]
+    public async Task<ActionResult<Artist>> TestAddDB(string artistName)
+    {
+        
+        try
+        {
+            Artist testArtist = new Artist()
+            {
+                Name = artistName
+            };
+            _dbContext.Artists.Add(testArtist);
+            await _dbContext.SaveChangesAsync();
+            Console.WriteLine(testArtist.Id);
+            return testArtist;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error in test");
         }
 
         return null;
