@@ -26,7 +26,7 @@ public class ArtistController : ControllerBase
     [HttpGet("GetArtistByName")]
     public async Task<ActionResult<string>> GetArtistByName(string artistName)
     {
-        var url = $"https://api.artsy.net/api/artists/{artistName}";
+        var url = $"fetch(`https://api.artsy.net/api/search?q=${artistName}`";
         try
         {
             var xappToken = await _artsyTokenManager.GetTokenFromArtsyAsync();
@@ -38,7 +38,7 @@ public class ArtistController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error in Artsy OpenWeather API with url: {url}");
+            _logger.LogError(e, $"Error in Artsy API with url: {url}");
         }
 
         return null;
